@@ -1,0 +1,90 @@
+generated: '2026-08-12'
+method: probed
+source: https://www.empatica.com/.well-known/
+name: Empatica /.well-known/ probe
+description: >-
+  Anonymous probe of the standard /.well-known/ discovery paths across every
+  Empatica host. Nothing was served. www.empatica.com and care.empatica.com are
+  single-page/Next.js applications that answer HTTP 200 with the same HTML shell
+  for EVERY unknown path — a control probe of
+  https://www.empatica.com/definitely-not-a-real-page-zzz9/ returned 200 with a
+  ~103KB HTML document identical in size to /.well-known/security.txt — so those
+  200s are soft-404s, not documents. api.empatica.com and support.empatica.com
+  return honest 404s. No WellKnown, SecurityTxt or AgentCard pointer is emitted
+  from this probe, because no path returned a real document.
+result: no-documents-served
+soft_200_hosts:
+- host: www.empatica.com
+  note: Next.js catch-all; every unknown path returns 200 text/html (~103KB shell).
+  control_probe:
+    url: https://www.empatica.com/definitely-not-a-real-page-zzz9/
+    status: 200
+    content_type: text/html; charset=utf-8
+- host: care.empatica.com
+  note: Care Dashboard SPA; every unknown path returns 200 text/html with <title>Care
+    Dashboard</title>.
+probes:
+- host: www.empatica.com
+  paths:
+  - {path: /.well-known/security.txt, status: 200, content_type: 'text/html; charset=utf-8',
+    document: false, verdict: soft-404-html-shell}
+  - {path: /.well-known/openid-configuration, status: 200, content_type: 'text/html;
+      charset=utf-8', document: false, verdict: soft-404-html-shell}
+  - {path: /.well-known/oauth-authorization-server, status: 200, content_type: 'text/html;
+      charset=utf-8', document: false, verdict: soft-404-html-shell}
+  - {path: /.well-known/api-catalog, status: 200, content_type: 'text/html; charset=utf-8',
+    document: false, verdict: soft-404-html-shell}
+  - {path: /.well-known/ai-plugin.json, status: 200, content_type: 'text/html; charset=utf-8',
+    document: false, verdict: soft-404-html-shell}
+  - {path: /.well-known/agent-card.json, status: 200, content_type: 'text/html; charset=utf-8',
+    document: false, verdict: soft-404-html-shell}
+  - {path: /.well-known/agent.json, status: 200, content_type: 'text/html; charset=utf-8',
+    document: false, verdict: soft-404-html-shell}
+- host: api.empatica.com
+  paths:
+  - {path: /.well-known/security.txt, status: 404, document: false}
+  - {path: /.well-known/openid-configuration, status: 404, document: false}
+  - {path: /.well-known/oauth-authorization-server, status: 404, document: false}
+  - {path: /.well-known/oauth-protected-resource, status: 404, document: false}
+  - {path: /.well-known/api-catalog, status: 404, document: false}
+  - {path: /.well-known/ai-plugin.json, status: 404, document: false}
+  - {path: /.well-known/agent-card.json, status: 404, document: false}
+  - {path: /.well-known/agent.json, status: 404, document: false}
+- host: care.empatica.com
+  paths:
+  - {path: /.well-known/security.txt, status: 200, content_type: text/html, document: false,
+    verdict: soft-404-html-shell}
+  - {path: /.well-known/openid-configuration, status: 200, content_type: text/html,
+    document: false, verdict: soft-404-html-shell}
+  - {path: /.well-known/oauth-authorization-server, status: 200, content_type: text/html,
+    document: false, verdict: soft-404-html-shell}
+  - {path: /.well-known/api-catalog, status: 200, content_type: text/html, document: false,
+    verdict: soft-404-html-shell}
+  - {path: /.well-known/ai-plugin.json, status: 200, content_type: text/html, document: false,
+    verdict: soft-404-html-shell}
+  - {path: /.well-known/agent-card.json, status: 200, content_type: text/html, document: false,
+    verdict: soft-404-html-shell}
+  - {path: /.well-known/agent.json, status: 200, content_type: text/html, document: false,
+    verdict: soft-404-html-shell}
+- host: support.empatica.com
+  paths:
+  - {path: /.well-known/security.txt, status: 404, document: false}
+  - {path: /.well-known/openid-configuration, status: 404, document: false}
+  - {path: /.well-known/oauth-authorization-server, status: 404, document: false}
+  - {path: /.well-known/api-catalog, status: 404, document: false}
+  - {path: /.well-known/ai-plugin.json, status: 404, document: false}
+  - {path: /.well-known/agent-card.json, status: 404, document: false}
+  - {path: /.well-known/agent.json, status: 404, document: false}
+- host: developer.empatica.com
+  note: Host resolves but the site is retired — every path 404s and the root redirects
+    to the E4 sunset notice.
+  paths:
+  - {path: /.well-known/security.txt, status: 404, document: false}
+  - {path: /.well-known/agent-card.json, status: 404, document: false}
+  - {path: /openapi.json, status: 404, document: false}
+recommendations:
+- Publish /.well-known/security.txt (RFC 9116) with a Contact and Policy for coordinated
+  vulnerability disclosure — none exists on any Empatica host today.
+- Return a real 404 for unknown paths on www.empatica.com and care.empatica.com. The
+  current catch-all 200 makes every discovery probe unanswerable and is indistinguishable
+  from a served document to any automated client.

@@ -1,0 +1,112 @@
+generated: '2026-08-12'
+method: searched
+source: https://support.empatica.com/hc/en-us/articles/16650715124125-Generating-and-Revoking-Data-Access-Keys
+docs:
+- https://support.empatica.com/hc/en-us/articles/16650715124125-Generating-and-Revoking-Data-Access-Keys
+- https://support.empatica.com/hc/en-us/articles/13879014347421-Accessing-Data-on-the-S3-Bucket
+name: Empatica authentication profile
+description: >-
+  Empatica publishes no OpenAPI and no public API reference, so this profile is
+  assembled from the provider's own support documentation for Data Access Keys
+  and from anonymous probes of the live api.empatica.com host. There is no OAuth
+  2.0 or OpenID Connect surface anywhere: /.well-known/openid-configuration and
+  /.well-known/oauth-authorization-server 404 on api.empatica.com and are
+  soft-404 HTML shells on www and care. Consequently no scopes/ artifact is
+  emitted — there is no scope surface to describe.
+schemes:
+- id: data-access-keys
+  applies_to: empatica-cloud-data-access
+  type: aws-sigv4
+  in: header
+  method: searched
+  documented: true
+  description: >-
+    AWS Access Key ID + Secret Access Key pair, issued by Empatica and scoped to
+    the organization's S3 prefix. Presented as ordinary AWS Signature Version 4
+    credentials by whatever S3 client is used (Cyberduck, AWS CLI v2, an AWS SDK).
+  credentials:
+  - name: ACCESS KEY ID
+    description: AWS Access Key ID used to connect to the Empatica S3 bucket.
+  - name: SECRET ACCESS KEY
+    description: AWS Secret Access Key. Shown once, at generation time, and downloadable
+      as CSV. Not retrievable afterwards.
+  - name: S3 ACCESS URL
+    description: 'Organization-specific data location, of the form s3://bucket-name/version/dir-name/.'
+  issuance:
+    surface: Care Portal → Data → Data Access Keys
+    self_service: true
+    max_active_key_sets: 2
+    rotation: >-
+      A new key set can only be generated once an existing set is revoked, so
+      rotation is a revoke-then-generate operation rather than an overlap.
+    revocation: >-
+      Irreversible. Revoking invalidates all previously validated tokens and
+      breaks every application using that key set. One slot re-opens for a new set.
+    delivery: Displayed in the portal once; downloadable as CSV.
+  provider_guidance:
+  - Treat access keys as secret; never publish or expose them.
+  - Never commit keys in plain text to a versioning system such as Git.
+  - Use environment variables or a secrets-management tool.
+  source: https://support.empatica.com/hc/en-us/articles/16650715124125-Generating-and-Revoking-Data-Access-Keys
+- id: platform-bearer-token
+  applies_to: empatica-platform-api
+  type: http
+  scheme: bearer
+  in: header
+  header: Authorization
+  method: probed
+  documented: false
+  description: >-
+    api.empatica.com/v2 is a token-protected REST host. A bearer token is
+    exchanged at POST /v2/login; protected routes reject an anonymous or
+    unrecognised token with HTTP 401 and errorCode 3998 "Missing token".
+    Empatica publishes no reference for this host — every field below is probe
+    evidence recorded on 2026-08-12, not documentation.
+  token_endpoint: https://api.empatica.com/v2/login
+  grant: username/password exchanged for a token (form/JSON body; body schema not
+    published)
+  x-evidence:
+  - {url: 'https://api.empatica.com/v2/login', method: POST, body: '{}', http_status: 401,
+    response: '{"status":"error","statusText":"Unauthorized","errorCode":3010,"payload":"Invalid
+      username or password"}'}
+  - {url: 'https://api.empatica.com/v2/users/me', method: GET, auth: none, http_status: 401,
+    response: '{"status":"Missing token","statusText":"","errorCode":3998}'}
+  - {url: 'https://api.empatica.com/v2/users/me', method: GET, auth: 'Bearer <invalid>',
+    http_status: 401, response: '{"status":"Missing token","statusText":"","errorCode":3998}'}
+  - {url: 'https://api.empatica.com/v2/devices', method: POST, auth: none, http_status: 401,
+    response: '{"status":"Missing token","statusText":"","errorCode":3998}'}
+  cors_advertised_headers:
+  - origin
+  - x-requested-with
+  - content-type
+  - accept
+  - authorization
+  - x-emp-app-version
+  - x-emp-app-name
+  - x-emp-app-platform
+  - x-forwarded-for
+  - elastic-apm-traceparent
+- id: cloud-api-credentials
+  applies_to: empatica-cloud-api
+  type: unknown
+  method: none
+  documented: false
+  description: >-
+    The Cloud API's authentication model is not published. Empatica states on
+    https://www.empatica.com/cloud-api/ that "All Cloud API clients will be
+    provided with full developer documentation", so the auth scheme is disclosed
+    only after a contract is in place. Recorded as unknown rather than guessed.
+  x-evidence:
+  - {url: 'https://www.empatica.com/cloud-api/', http_status: 200, finding: no auth
+      scheme, base URL or reference published}
+oauth2: false
+openid_connect: false
+mutual_tls: not-documented
+mfa: not-documented
+gaps:
+- No public API reference documents any authentication scheme for the Cloud API.
+- No OAuth 2.0 or OIDC discovery document is served on any Empatica host.
+- api.empatica.com returns no WWW-Authenticate header on a 401, so a client cannot
+  discover the scheme from the challenge.
+- Data Access Keys cap at two active sets with no overlap window, which forces a
+  break-then-rotate posture for automated consumers.

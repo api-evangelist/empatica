@@ -1,0 +1,41 @@
+generated: '2026-08-12'
+method: probed
+source: https://api.empatica.com/v2/
+name: Empatica rate limits
+description: >-
+  Empatica publishes no rate-limit documentation for any surface, and the live
+  host returns no rate-limit headers. Both halves were checked: the docs search
+  found nothing, and the runtime probe found nothing. limit_count 0 is a measured
+  zero, not an unchecked one.
+limit_count: 0
+documented: false
+limits: []
+response_headers:
+  x_ratelimit: not-returned
+  ratelimit_draft: not-returned
+  retry_after: not-returned
+  detail: >-
+    No X-RateLimit-Limit / -Remaining / -Reset, no RFC 9239-style RateLimit /
+    RateLimit-Policy, and no Retry-After header appeared on any probed response from
+    api.empatica.com, including repeated failed POSTs to /v2/login. The host's
+    Access-Control-Expose-Headers is "*", so a browser client would see such headers
+    if they existed.
+exhaustion_status_code: unknown
+x-evidence:
+- {url: 'https://api.empatica.com/v2/login', method: POST, http_status: 401, rate_limit_headers: none}
+- {url: 'https://api.empatica.com/v2/users/me', method: GET, http_status: 401, rate_limit_headers: none}
+- {url: 'https://api.empatica.com/v2/users', method: GET, http_status: 405, rate_limit_headers: none}
+- {url: 'https://www.empatica.com/cloud-api/', http_status: 200, finding: 'no rate,
+    quota or throughput figure published'}
+data_transfer_cadence:
+  note: >-
+    The nearest thing Empatica publishes to a throughput contract is not a rate limit
+    but a delivery cadence — high-frequency raw data is uploaded to the Empatica Cloud
+    every 30 minutes and lands in S3 as Avro files covering up to ~30 minutes each.
+    S3 read throughput is governed by AWS, not by Empatica.
+  source: https://support.empatica.com/hc/en-us/articles/17727336158365-Raw-data-in-the-Empatica-Cloud
+gaps:
+- No published limits for the Cloud API, which is sold to automated CTMS/EDC integrations
+  that will poll it.
+- No runtime signal of any kind, so a client cannot back off before being throttled and
+  cannot tell throttling from failure.

@@ -1,0 +1,115 @@
+generated: '2026-08-12'
+method: searched
+source: https://www.empatica.com/research/e4-sunset/
+name: Empatica lifecycle, versioning and deprecation posture
+description: >-
+  What Empatica publishes about versioning, deprecation and operational status.
+  There is no API-level versioning policy or deprecation policy document; what
+  does exist is a dated product sunset notice for the E4 platform and an
+  Atlassian Statuspage covering the live services.
+versioning:
+  api_policy_published: false
+  scheme: uri-path (observed)
+  current: v2
+  detail: >-
+    api.empatica.com serves under a /v2/ path prefix; /v1/ and /v3/ are not routed.
+    No policy states how long a version is supported, how a new version is announced,
+    or what constitutes a breaking change.
+  method: probed
+  source: https://api.empatica.com/v2/
+deprecation:
+  policy_published: false
+  notice_published: true
+  headers:
+    sunset_rfc8594: false
+    deprecation_header: false
+    detail: No Sunset or Deprecation response header was observed on any probed endpoint.
+  events:
+  - name: E4 wristband and E4 software suite
+    status: sunset
+    effective_date: '2025-02-14'
+    announcement: https://www.empatica.com/research/e4-sunset/
+    migration_target: EmbracePlus
+    detail: >-
+      "As of February 14th, 2025, the E4 and its software suite have officially been
+      sunset." The E4 developer surface went with it — developer.empatica.com now
+      302s to the sunset notice, and the empatica/empatica.github.io repository that
+      served it contains only index.html, 404.html and a CNAME. Every first-party E4
+      SDK and the E4 Connect/Realtime documentation are gone.
+    x-evidence:
+    - {url: 'https://developer.empatica.com/', http_status: 200, note: root serves a
+        redirect notice to https://www.empatica.com/research/e4-sunset/}
+    - {url: 'https://developer.empatica.com/openapi.json', http_status: 404}
+    - {url: 'https://www.empatica.com/research/e4-sunset/', http_status: 200}
+  - name: Embrace2
+    status: no-longer-available-for-purchase
+    announcement: https://www.empatica.com/embrace2/
+    detail: Site navigation labels Embrace2 "No longer available for purchase"; support
+      articles remain.
+    method: searched
+  assessment: >-
+    A dated sunset notice with a named migration target is real deprecation
+    communication, and it is why a Deprecation pointer is emitted. It is NOT a
+    deprecation policy: there is no stated notice period, no support window, and no
+    machine-readable Sunset/Deprecation header on any endpoint.
+status_page:
+  url: https://status.empatica.com/
+  provider: Atlassian Statuspage
+  machine_readable: true
+  api:
+    summary: https://status.empatica.com/api/v2/summary.json
+    status: https://status.empatica.com/api/v2/status.json
+    components: https://status.empatica.com/api/v2/components.json
+    incidents: https://status.empatica.com/api/v2/incidents.json
+    note: Statuspage's standard anonymous JSON API is available on this page, which
+      is the only machine-readable operational signal Empatica exposes.
+  components_observed: 28
+  components:
+  - Empatica.com
+  - care.empatica.com
+  - Research.empatica.com
+  - Myembrace.empatica.com
+  - EHMP Enterprise web
+  - EHMP Enterprise mobile
+  - EHMP Professional web
+  - EHMP Professional mobile
+  - EHMP PKG web - EU
+  - EHMP PKG web - US
+  - EHMP PKG mobile - EU
+  - EHMP PKG mobile - US
+  - EpiMonitor Mobile Application
+  - Research portal
+  - Mate
+  - Alert
+  - Alert Dispatcher
+  - Physical Activity Analysis
+  - Empatica Server
+  - Third-party Alerting Server
+  - Third-party Text-to-Speech
+  - Third-party Credit Card Service
+  - Third-party Calls
+  note: >-
+    Component list is regionalised (EU/US) for the PKG Parkinson's surfaces and names
+    third-party dependencies explicitly, which is unusually transparent. Several
+    components share the generic label "Empatica Server", so a consumer cannot map an
+    incident to a specific API surface.
+  method: probed
+  x-evidence:
+  - {url: 'https://status.empatica.com/api/v2/summary.json', http_status: 200, content_type: application/json}
+sla:
+  published: false
+  detail: No public SLA, uptime commitment or support-response target was found for
+    any Empatica surface.
+changelog:
+  api_changelog_published: false
+  detail: >-
+    No dated API changelog or release-notes feed exists. Product and regulatory
+    announcements are published as blog posts at https://www.empatica.com/blog/, and
+    operational history is available through the Statuspage incidents API, but neither
+    is a versioned change record for a contract.
+gaps:
+- No API versioning policy and no deprecation policy.
+- No RFC 8594 Sunset or Deprecation headers on any live endpoint.
+- No SLA.
+- No API changelog.
+- Statuspage components are not mapped to API surfaces.

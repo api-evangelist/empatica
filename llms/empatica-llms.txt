@@ -1,0 +1,56 @@
+# Empatica
+
+Empatica Inc. is an MIT Media Lab spinoff company founded in Cambridge, Massachusetts, operating in Healthcare and providing AI-enabled tools to advance forecasting, monitoring, research, and treatment. Empatica develops FDA-cleared medical wearables, EmbracePlus and EmbraceMini, and an AI-powered Health Monitoring Platform for continuous, remote physiological data collection, serving clinical researchers, pharmaceutical companies, CROs, clinicians, and patients.
+
+Empatica's products hold medical device clearances and certifications across major global regulatory frameworks.. More than half of the top 20 pharmaceutical companies use Empatica's platform to monitor treatment impact and develop novel digital biomarkers as digital endpoints.
+
+## Products / Services
+
+- [Empatica Health Monitoring Platform](https://www.empatica.com/platform): The cloud-based research platform that powers all Empatica devices, offering compliance dashboards, digital biomarker analysis, eCOA/ePRO, and global study management.
+  - Pricing for Academics:
+    - EmbracePlus $1,166.40/unit /
+    - 3-year Platform Subscription: $1,166.40
+    - 5-year Platform Subscription: $1,749.60
+    - Accessories:
+      - Extra charger: $42.90 /
+      - Silicone Band Loops \- 3 units: $21.90
+  - Pricing for Enterprise Trials: For pricing information, please reach out to the Empatica team.
+- [EmbracePlus](https://www.empatica.com/embraceplus): Empatica's flagship FDA-cleared medical smartwatch for clinical research and patient monitoring, measuring heart rate, EDA, skin temperature, and more across 300+ digital measures with up to 28 days of battery life.
+- [EmbraceMini](https://www.empatica.com/embracemini): An ultra-compact actigraphy wearable at just 12mm thick and 14mm wide, the smallest wrist-worn actigraphy device for clinical research, designed for sleep and activity monitoring in clinical trials.
+- [EpiMonitor](https://www.empatica.com/epimonitor): An FDA-cleared epilepsy monitoring system combining the EmbracePlus wearable and a companion smartphone app, designed for generalized tonic-clonic seizure detection in adults and children aged 6 and older.
+  - Pricing:
+    - EmbracePlus \- 1 unit: $399 / €399
+    - Subscriptions
+      - Basic (essential for 1 caregiver): $17.40/mo. / €16.90/mo.
+      - Standard (enhanced for up to 3 caregivers): $26.90/mo. / €26.90/mo.
+      - Plus (complete plan for 10 caregivers) $52.90/mo. / €51.90/mo.
+      -
+    - Accessories
+      - Extra Vegan Leather Band: $41.90 / €40.50
+      - Extra Stretchable Band: $21.90 / €21.50
+      - Silicone Band Loops \- 3 units: $21.90 / €21.50
+      - EmbracePlus \- extra charger: $36.90 / €35.90
+  - Supported regions: US, UK, EU, AU, NZ, CA
+- [Parkinson's Monitoring](https://www.empatica.com/clinical-care/parkinsons/): CE-marked under EU MDR 2017/745 for Parkinson's monitoring, combining validated PKG movement disorder algorithms (from the acquisition of PKG Health) with wearable data from EmbraceMini to enable continuous monitoring of motor symptoms.
+- [Empatica Care](https://www.empatica.com/care): The Care app and Care Portal are CE-certified components of the Empatica Health Monitoring Platform, designed to work with Empatica’s wearable devices for continuous data streaming, access, and visualization. The Care Portal also provides Data Access Keys for downloading raw sensor and digital biomarker data from cloud storage for further analysis.
+
+## Documentation
+
+- [Support Center](https://support.empatica.com): Help articles and guides for researchers, clinicians, patients, and study participants.
+- [Manuals](https://www.empatica.com/manuals): Technical manuals and documentation for Empatica devices and platform.
+
+## Company
+
+- [About Empatica](https://www.empatica.com/company): Company background, mission, and founding team.
+- [Blog](https://www.empatica.com/blog): Research updates, product launches, and clinical trial insights.
+- [Contact](https://www.empatica.com/talk-to-our-team): General inquiries; research partnerships at <partnerships@empatica.com>; support via the Support Center.
+- [Careers](https://www.empatica.com/careers): Open roles across the Boston, Milan, London, and Seoul offices.
+
+## Resources
+
+- [Publications](https://www.empatica.com/research/publications/): Academic papers, peer reviews, and studies referencing Empatica technology.
+- [Case Studies](https://www.empatica.com/platform/cro): How pharma companies, CROs, and academic institutions use Empatica technology.
+
+### Policies
+
+- [Compliance, Privacy Policy, and Terms of Service](https://www.empatica.com/legal/): Global regulatory requirements. How user and patient data is collected, stored, and protected (HIPAA, GDPR, ISO 13485 compliant). Legal terms governing the use of Empatica products and services.

@@ -1,0 +1,101 @@
+generated: '2026-08-12'
+method: searched
+source: https://www.empatica.com/llms.txt
+docs:
+- https://www.empatica.com/llms.txt
+- https://www.empatica.com/store/platform-professional/
+- https://www.empatica.com/store/epimonitor/
+name: Empatica plans and pricing
+description: >-
+  Empatica publishes real list prices — but only for the self-serve tiers, and
+  the most complete published price list is the one in its own llms.txt, not the
+  store pages (which render prices client-side). Enterprise clinical-trial
+  pricing, which is the tier the Cloud API belongs to, is quote-only. Values
+  below are transcribed verbatim from provider-published text; none are inferred.
+currency_note: Prices published in USD and, for consumer products, EUR.
+plan_count: 6
+plans:
+- id: platform-academic
+  name: Empatica Health Monitoring Platform — Academic & Basic Research
+  audience: academic and basic research
+  self_serve: true
+  billing: one-time hardware purchase plus a multi-year platform subscription
+  items:
+  - {name: EmbracePlus, price: 1166.40, currency: USD, unit: per unit}
+  - {name: Platform Subscription — 3 year, price: 1166.40, currency: USD, period: 3
+      years}
+  - {name: Platform Subscription — 5 year, price: 1749.60, currency: USD, period: 5
+      years}
+  - {name: Extra charger, price: 42.90, currency: USD, unit: each, category: accessory}
+  - {name: Silicone Band Loops — 3 units, price: 21.90, currency: USD, category: accessory}
+  api_access: Not stated. The Cloud API is marketed for enterprise clinical trials;
+    academic plans document S3 Data Access Keys instead.
+  source: https://www.empatica.com/llms.txt
+- id: platform-enterprise
+  name: Empatica Health Monitoring Platform — Enterprise Trials
+  audience: pharmaceutical sponsors, CROs, clinical trial sponsors
+  self_serve: false
+  price: contact-sales
+  quote: 'For pricing information, please reach out to the Empatica team.'
+  api_access: >-
+    This is the tier the Cloud API is sold into. Empatica states "All Cloud API
+    clients will be provided with full developer documentation", so both the price
+    and the API reference are behind the same sales conversation.
+  contact: https://www.empatica.com/talk-to-our-team
+  source: https://www.empatica.com/llms.txt
+- id: epimonitor-basic
+  name: EpiMonitor — Basic
+  audience: patients and caregivers
+  self_serve: true
+  description: Essential plan for 1 caregiver.
+  price: 17.40
+  currency: USD
+  price_eur: 16.90
+  period: month
+  source: https://www.empatica.com/llms.txt
+- id: epimonitor-standard
+  name: EpiMonitor — Standard
+  audience: patients and caregivers
+  self_serve: true
+  description: Enhanced plan for up to 3 caregivers.
+  price: 26.90
+  currency: USD
+  price_eur: 26.90
+  period: month
+  source: https://www.empatica.com/llms.txt
+- id: epimonitor-plus
+  name: EpiMonitor — Plus
+  audience: patients and caregivers
+  self_serve: true
+  description: Complete plan for 10 caregivers.
+  price: 52.90
+  currency: USD
+  price_eur: 51.90
+  period: month
+  source: https://www.empatica.com/llms.txt
+- id: embrace2
+  name: Embrace2
+  status: discontinued
+  price: null
+  note: No longer available for purchase; listed in site navigation as retired.
+  source: https://www.empatica.com/embrace2/
+hardware:
+- {name: EmbracePlus (EpiMonitor), price: 399.00, currency: USD, price_eur: 399.00,
+  unit: 1 unit}
+- {name: Extra Vegan Leather Band, price: 41.90, currency: USD, price_eur: 40.50}
+- {name: Extra Stretchable Band, price: 21.90, currency: USD, price_eur: 21.50}
+- {name: Silicone Band Loops — 3 units, price: 21.90, currency: USD, price_eur: 21.50}
+- {name: EmbracePlus — extra charger, price: 36.90, currency: USD, price_eur: 35.90}
+supported_regions_epimonitor: [US, UK, EU, AU, NZ, CA]
+api_metering:
+  published: false
+  detail: >-
+    No per-call, per-participant or per-volume pricing is published for the Cloud API,
+    and no usage or quota dimension is named anywhere. API access appears bundled into
+    an enterprise platform contract rather than metered.
+gaps:
+- No pricing page for the Cloud API itself.
+- Academic plan prices are published in llms.txt but rendered client-side on the store
+  pages, so an agent reading the store HTML sees no prices at all — the llms.txt is
+  strictly the better machine-readable source, which is an unusual and welcome inversion.
+- No free tier, trial, or sandbox at any price point.

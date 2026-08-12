@@ -1,0 +1,81 @@
+generated: '2026-08-12'
+method: probed
+source: https://api.empatica.com/v2/
+name: Empatica Platform API error envelope and observed codes
+description: >-
+  Empatica publishes no error reference. This catalog is built entirely from
+  anonymous probes of the live api.empatica.com/v2 host on 2026-08-12. Only codes
+  actually observed in a response body are listed — nothing is inferred, and the
+  numeric ranges are deliberately NOT extrapolated.
+format: custom
+rfc9457: false
+content_type: application/json
+problem_json_supported: false
+envelope:
+  shape: |-
+    {
+      "status":     "<string>",   // short machine-ish state, e.g. "error", "Missing token"
+      "statusText": "<string>",   // HTTP-ish reason phrase; observed empty on some codes
+      "errorCode":  <integer>,    // Empatica-specific numeric code — the stable identifier
+      "payload":    "<string>"    // human message; absent on some responses
+    }
+  notes:
+  - The `status` field is overloaded — it carries the literal "error" on one code and
+    the human message ("Missing token") on another, so it is not a reliable discriminator.
+  - '`errorCode` is the only stable machine-readable discriminator observed.'
+  - No `type`, `title`, `detail` or `instance` members; this is not RFC 9457.
+  - No trace/correlation id is returned in the body or in a response header, despite
+    the host advertising elastic-apm-traceparent as an accepted REQUEST header.
+codes:
+- code: 3010
+  http_status: 401
+  status: error
+  status_text: Unauthorized
+  payload: Invalid username or password
+  meaning: Credentials presented to the login endpoint were rejected.
+  observed_at: POST https://api.empatica.com/v2/login
+  action: Re-authenticate with valid credentials. Do not retry with the same credentials.
+  method: probed
+- code: 3998
+  http_status: 401
+  status: Missing token
+  status_text: ''
+  meaning: >-
+    No bearer token, or a token the server does not recognise, was presented to a
+    protected route. Returned identically for an absent Authorization header and for
+    an invalid Bearer value, so a client cannot distinguish "never authenticated"
+    from "token expired" — both require a fresh POST /v2/login.
+  observed_at:
+  - GET https://api.empatica.com/v2/users/me
+  - POST https://api.empatica.com/v2/devices
+  - POST https://api.empatica.com/v2/orders
+  action: Obtain a token from POST /v2/login and resend with an Authorization header.
+  method: probed
+transport_errors:
+- http_status: 404
+  body: 404 page not found
+  content_type: text/plain; charset=utf-8
+  meaning: Unrouted path inside the /v2/ application. Plain text, not JSON — a JSON
+    client must handle a non-JSON 404.
+  method: probed
+- http_status: 404
+  body: nginx HTML error page
+  content_type: text/html
+  meaning: Path never reached the /v2/ application; the edge nginx answered. Distinguishes
+    a wrong version prefix from a wrong route.
+  method: probed
+- http_status: 405
+  body: '' # zero-length
+  content_type: application/json
+  meaning: >-
+    Method not allowed on an existing route (observed on GET /v2/users, GET /v2/devices,
+    GET /v2/orders). Content-Type claims application/json but Content-Length is 0, so a
+    client that parses on content-type will throw. No Allow header is returned, so the
+    permitted methods cannot be discovered from the response.
+  method: probed
+gaps:
+- No published error reference, so consumers cannot enumerate codes ahead of an incident.
+- No RFC 9457 application/problem+json representation.
+- 405 responses declare application/json with an empty body and omit the Allow header.
+- 401 responses omit WWW-Authenticate.
+- No correlation identifier is returned on failures.

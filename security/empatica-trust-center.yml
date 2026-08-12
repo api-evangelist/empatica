@@ -1,0 +1,63 @@
+generated: '2026-08-12'
+method: searched
+source: https://www.empatica.com/legal/
+name: Empatica compliance and trust surface
+url: https://www.empatica.com/legal/
+description: >-
+  Empatica does not run a branded "trust center" — trust.empatica.com and
+  security.empatica.com do not resolve, and /trust, /security and /compliance on
+  www.empatica.com are soft-404s served by the site's catch-all. What it does
+  publish, at https://www.empatica.com/legal/, is a genuine compliance page with
+  named, independently verifiable certifications and clearances, plus a contact
+  address. That page is the trust surface.
+verified: true
+hosted: first-party page (not a hosted trust-center product)
+certifications:
+- {name: 'UNI CEI EN ISO 13485:2021', category: quality-management, evidence: 'https://cdn.sanity.io/files/ggwhkgro/production/66365d60b7cbed6ee18b03bf83dda5407945fddd.pdf'}
+- {name: 'ISO/IEC 27001:2022', category: information-security, evidence: 'https://www.empatica.com/go/empatica-iso-iec'}
+- {name: MDSAP, category: medical-device-audit, evidence: 'https://empatica.com/go/mdsap-certificate',
+  scope: 'ISO 13485:2016; Australian TGA; Canadian Medical Devices Regulations; US 21
+    CFR 803, 806, 807, 820'}
+- {name: 'CE marking under EU MDR 2017/745', category: medical-device-regulatory, evidence: 'https://www.empatica.com/go/empatica-ce-certificate'}
+- {name: FDA 510(k) clearances, category: medical-device-regulatory, count: 8, evidence: 'https://www.empatica.com/legal/',
+  clearances: [K172935, K181861, K221282, K230457, K232915, K242737, K250515, K252981]}
+- {name: TGA ARTG listings (Australia), category: medical-device-regulatory, evidence: 'https://www.empatica.com/go/artg-embraceplus-empaticacare'}
+- {name: Health Canada Medical Device Licences, category: medical-device-regulatory,
+  evidence: 'https://www.empatica.com/go/ca-medical-device-licence-ehmp-pd-monitoring'}
+claimed_not_certified:
+- {name: HIPAA, note: Stated as "HIPAA, GDPR, and ISO certified" on the Cloud API page;
+    no third-party attestation report published.}
+- {name: GDPR, note: 'Region- and language-specific privacy policies plus a Data Processing
+    Agreement are published; no certification exists for GDPR.'}
+not_found:
+- {name: SOC 2, note: No SOC 2 Type I or Type II report or bridge letter is published
+    or offered on the compliance page.}
+- {name: HITRUST, note: Not mentioned.}
+- {name: FedRAMP, note: Not mentioned.}
+data_processing_agreement:
+  available: true
+  url: https://d5j000001qpstuaw.my.salesforce.com/sfc/p/5J000001QPsT/a/SW000000uPDR/le0mXO8x78Lpubeoe3zVmaQMBHZZ1r7f1xsTMKvszBM
+  note: Hosted on Salesforce Files rather than on empatica.com.
+vendor_pack:
+  available: true
+  url: https://lp.empatica.com/vendor-pack
+  note: Vendor documentation pack for the Academic & Basic Research plan, behind a
+    landing-page form.
+contact:
+  compliance: compliance@empatica.com
+data_residency:
+  regions_observed: [EU, US]
+  evidence: Statuspage lists EHMP PKG web and mobile components separately for EU and
+    US, indicating regionalised deployment for the Parkinson's monitoring surface.
+  source: https://status.empatica.com/api/v2/summary.json
+x-evidence:
+- {url: 'https://www.empatica.com/legal/', http_status: 200}
+- {url: 'https://trust.empatica.com/', http_status: 0, note: DNS does not resolve}
+- {url: 'https://security.empatica.com/', http_status: 0, note: DNS does not resolve}
+- {url: 'https://www.empatica.com/trust/', http_status: 200, note: 'soft-404 — the same
+    ~103KB HTML shell the catch-all returns for /definitely-not-a-real-page-zzz9/'}
+gaps:
+- No SOC 2 report, which is the artifact enterprise software buyers ask for first.
+- No dedicated trust or security landing page; the compliance evidence sits under /legal/
+  alongside EULAs and privacy policies.
+- The DPA is hosted on a Salesforce Files link rather than a stable empatica.com URL.

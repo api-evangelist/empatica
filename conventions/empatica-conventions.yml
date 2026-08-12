@@ -1,0 +1,129 @@
+generated: '2026-08-12'
+method: probed
+source: https://api.empatica.com/v2/
+docs:
+- https://support.empatica.com/hc/en-us/articles/17727336158365-Raw-data-in-the-Empatica-Cloud
+- https://support.empatica.com/hc/en-us/articles/13879014347421-Accessing-Data-on-the-S3-Bucket
+name: Empatica cross-cutting API conventions
+description: >-
+  Runtime semantics for the two Empatica surfaces that can actually be observed:
+  the live REST host at api.empatica.com/v2 (probed anonymously, undocumented)
+  and the S3 raw-data delivery channel (documented in the support centre). The
+  Cloud API is excluded — its conventions are disclosed to contracted clients
+  only. Empty and "not-documented" values below are findings, not omissions.
+authentication:
+  style: bearer token (REST) / AWS Signature V4 access key pair (S3)
+  detail: See authentication/empatica-authentication.yml
+  cross_ref: authentication/empatica-authentication.yml
+idempotency:
+  supported: unknown
+  header: none observed
+  detail: >-
+    No Idempotency-Key or equivalent header is advertised in the CORS
+    Access-Control-Allow-Headers list on api.empatica.com, and no documentation
+    describes retry-safety for any Empatica write operation. Recorded as unknown
+    rather than false — the probe reaches only unauthenticated surface. No
+    Idempotency pointer is emitted in apis.yml because there is no evidence of
+    support.
+  method: probed
+pagination:
+  style: not-documented
+  detail: No collection endpoint is reachable anonymously, and no pagination convention
+    is published.
+versioning:
+  style: uri-path
+  current: v2
+  detail: >-
+    api.empatica.com routes under a /v2/ path prefix. /v1/* is answered by the edge
+    nginx with a 404, and /v3/ redirects then 404s inside the application, so v2 is
+    the only live version prefix observed. No version negotiation header, no
+    deprecation or sunset headers were returned on any probed response.
+  observed:
+  - {prefix: /v1/, result: 404 nginx (not routed)}
+  - {prefix: /v2/, result: routed — real endpoints answer 401/405}
+  - {prefix: /v3/, result: 301 to /v3/ then 404 page not found}
+  method: probed
+error_envelope:
+  shape: '{status, statusText, errorCode, payload}'
+  format: custom JSON, not RFC 9457
+  discriminator: errorCode (integer)
+  cross_ref: errors/empatica-error-codes.yml
+rate_limit_signaling:
+  headers: none
+  detail: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header was present on any probed
+    response, including repeated failed POSTs to /v2/login. An agent has no runtime
+    budget signal.
+  cross_ref: rate-limits/empatica-rate-limits.yml
+  method: probed
+request_id_tracing:
+  response_header: none observed
+  request_header: elastic-apm-traceparent
+  detail: >-
+    The host accepts elastic-apm-traceparent as a request header (advertised in
+    Access-Control-Allow-Headers), which implies Elastic APM distributed tracing
+    server-side, but no request id or trace id is returned to the caller on any
+    response — so a consumer cannot quote an identifier when reporting a failure.
+  method: probed
+custom_headers:
+- name: x-emp-app-name
+  direction: request
+  purpose: Identifies the calling Empatica client application. Accepted per CORS policy;
+    semantics undocumented.
+- name: x-emp-app-version
+  direction: request
+  purpose: Client application version. Accepted per CORS policy; semantics undocumented.
+- name: x-emp-app-platform
+  direction: request
+  purpose: Client platform (mobile/web). Accepted per CORS policy; semantics undocumented.
+- name: elastic-apm-traceparent
+  direction: request
+  purpose: Elastic APM trace propagation.
+cors:
+  allow_origin: '*'
+  allow_credentials: true
+  allow_methods: [GET, PUT, POST, DELETE, PATCH, OPTIONS]
+  expose_headers: '*'
+  max_age: 86400
+  note: >-
+    Access-Control-Allow-Origin "*" is returned together with
+    Access-Control-Allow-Credentials "true". Browsers reject that combination, so
+    credentialed cross-origin calls from a browser cannot work against this host as
+    configured.
+  method: probed
+data_delivery:
+  channel: AWS S3 bucket, organization-scoped prefix
+  cadence: High-frequency raw data is uploaded to the Empatica Cloud every 30 minutes.
+  batch_window: Each Avro file holds up to roughly 30 minutes of uninterrupted stream;
+    a recording interruption closes the file early and opens a new one.
+  file_naming: '[participant_id]_[utc_timestamp_start].avro'
+  formats: [Apache Avro (raw), CSV (digital biomarkers and exports)]
+  timezone: >-
+    All data and filename timestamps are UTC+00:00. The participant's own offset from
+    UTC is carried inside the Avro metadata, so consumers must reconcile the two
+    themselves.
+  schema_carriage: >-
+    Avro files are self-describing — the schema, including sampling frequency per
+    sensor, is embedded in the file. Schema version is exposed as
+    schemaVersion{major,minor,patch}; behaviour changes at the 6.5.0 boundary (see
+    data-model/empatica-data-model.yml).
+  source: https://support.empatica.com/hc/en-us/articles/17727336158365-Raw-data-in-the-Empatica-Cloud
+expansion_or_sparse_fields:
+  supported: not-documented
+metadata_fields:
+  supported: not-documented
+webhooks:
+  supported: false
+  detail: >-
+    No webhook, callback or event-subscription surface is documented anywhere. A
+    search of the Empatica support centre for "webhook" returns zero articles. Data
+    integration is pull-based (S3 polling) or push-to-sponsor via the Cloud API.
+  method: searched
+gaps:
+- No published convention document of any kind; everything above is inferred from probes
+  or from data-access support articles.
+- CORS wildcard origin combined with allow-credentials is a browser-fatal configuration.
+- No rate-limit headers, no correlation id, no Allow header on 405, no WWW-Authenticate
+  on 401.
+- No idempotency mechanism advertised for a platform whose consumers are automated
+  clinical-trial systems performing participant writes.

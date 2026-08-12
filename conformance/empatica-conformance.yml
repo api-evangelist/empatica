@@ -1,0 +1,168 @@
+generated: '2026-08-12'
+method: searched
+source: https://www.empatica.com/legal/
+name: Empatica standards and regulatory conformance
+description: >-
+  What Empatica claims and publishes evidence for. Empatica is a regulated medical
+  device manufacturer, so its conformance surface is dominated by device and quality
+  regimes rather than API standards — and that asymmetry is the finding: the
+  certificate wall is extensive and independently verifiable, while conformance to
+  any web-API or agent-interoperability standard is nil.
+entries:
+- id: iso-13485
+  name: UNI CEI EN ISO 13485:2021 — Medical devices quality management systems
+  conforms: true
+  evidence:
+    type: certificate
+    url: https://cdn.sanity.io/files/ggwhkgro/production/66365d60b7cbed6ee18b03bf83dda5407945fddd.pdf
+    source: https://www.empatica.com/legal/
+- id: iso-iec-27001
+  name: ISO/IEC 27001:2022 — Information security management system
+  conforms: true
+  evidence:
+    type: certificate
+    url: https://www.empatica.com/go/empatica-iso-iec
+    detail: Covers information security risk evaluation and implementation of an ISMS.
+    source: https://www.empatica.com/legal/
+- id: mdsap
+  name: MDSAP — Medical Device Single Audit Program
+  conforms: true
+  evidence:
+    type: certificate
+    url: https://empatica.com/go/mdsap-certificate
+    scope: ISO 13485:2016, Australian TGA regulations, Canadian Medical Devices Regulations,
+      and US 21 CFR Parts 803, 806, 807 and 820.
+    source: https://www.empatica.com/legal/
+- id: eu-mdr-2017-745
+  name: EU MDR 2017/745 — CE marking under the Medical Device Regulation
+  conforms: true
+  evidence:
+    type: certificate + declarations of conformity
+    url: https://www.empatica.com/go/empatica-ce-certificate
+    declarations:
+    - {product: EHMP (EmbracePlus + Care), url: 'https://empatica.com/go/ehmp-embraceplus-care-declaration-of-conformity'}
+    - {product: Care Portal, url: 'https://empatica.com/go/care-portal-declaration-of-conformity'}
+    - {product: EmbraceMini, url: 'https://www.empatica.com/go/embracemini-eu-declaration-of-conformity'}
+    - {product: EpiMonitor (powered by EmbracePlus), url: 'https://empatica.com/go/epimonitor-powered-by-embraceplus-DoC'}
+    - {product: EpiMonitor by Empatica, url: 'https://empatica.com/go/epimonitor-by-empatica-declaration-of-conformity'}
+    source: https://www.empatica.com/legal/
+- id: fda-510k
+  name: US FDA 510(k) clearances
+  conforms: true
+  evidence:
+    type: regulatory clearance
+    clearances: [K172935, K181861, K221282, K230457, K232915, K242737, K250515, K252981]
+    registry: https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpmn/pmn.cfm
+    source: https://www.empatica.com/legal/
+- id: hipaa
+  name: HIPAA
+  conforms: claimed
+  evidence:
+    type: vendor claim
+    detail: Empatica states the platform is "HIPAA, GDPR, and ISO certified" on the
+      Cloud API page. No third-party HIPAA attestation report is published.
+    url: https://www.empatica.com/cloud-api/
+- id: gdpr
+  name: GDPR
+  conforms: claimed
+  evidence:
+    type: vendor claim + contractual artifact
+    detail: Region-specific privacy policies are published per product and language,
+      and a Data Processing Agreement is offered for the Health Monitoring Platform.
+    url: https://www.empatica.com/legal/
+- id: tga-artg
+  name: Australia TGA — ARTG listings
+  conforms: true
+  evidence:
+    type: registry listing
+    listings:
+    - {product: Care Portal, url: 'https://www.empatica.com/go/artg-careportal'}
+    - {product: EmbracePlus and Empatica Care, url: 'https://www.empatica.com/go/artg-embraceplus-empaticacare'}
+    - {product: EpiMonitor, url: 'https://www.empatica.com/go/epimonitor-artg'}
+    source: https://www.empatica.com/legal/
+- id: health-canada
+  name: Health Canada Medical Device Licences
+  conforms: true
+  evidence:
+    type: licence
+    licences:
+    - {product: EpiMonitor, url: 'https://www.empatica.com/go/epimonitor-health-canada'}
+    - {product: EHMP and Parkinson's Disease Monitoring, url: 'https://www.empatica.com/go/ca-medical-device-licence-ehmp-pd-monitoring'}
+    source: https://www.empatica.com/legal/
+- id: apache-avro
+  name: Apache Avro 1.11.x data serialization
+  conforms: true
+  evidence:
+    type: published data contract
+    detail: >-
+      Raw sensor data is delivered as self-describing Avro files carrying their own
+      schema and sampling frequencies, with official reader APIs in Python, Java, C,
+      C#, C++ and a MATLAB interface. This is the one genuinely open, machine-readable
+      standard in Empatica's data path.
+    url: https://support.empatica.com/hc/en-us/articles/17727336158365-Raw-data-in-the-Empatica-Cloud
+- id: aws-s3-api
+  name: AWS S3 API / Signature Version 4
+  conforms: true
+  evidence:
+    type: documented integration surface
+    detail: Data is retrieved with any standard S3 client (Cyberduck, AWS CLI v2, AWS
+      SDKs) using Empatica-issued access keys.
+    url: https://support.empatica.com/hc/en-us/articles/13879014347421-Accessing-Data-on-the-S3-Bucket
+- id: openapi
+  name: OpenAPI
+  conforms: false
+  evidence:
+    type: probe
+    detail: No OpenAPI or Swagger document is served on any Empatica host. Probed
+      /openapi.json, /openapi.yaml, /swagger.json, /api-docs, /docs and /redoc against
+      api.empatica.com, www.empatica.com, care.empatica.com and developer.empatica.com.
+    date: '2026-08-12'
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence:
+    type: probe
+    detail: 'Errors are returned as a custom envelope {status, statusText, errorCode,
+      payload}, not application/problem+json.'
+    url: errors/empatica-error-codes.yml
+- id: oauth2-oidc
+  name: OAuth 2.0 / OpenID Connect
+  conforms: false
+  evidence:
+    type: probe
+    detail: No discovery document at /.well-known/openid-configuration or
+      /.well-known/oauth-authorization-server on any host. Authentication is a
+      bearer token from a login endpoint plus AWS access keys for S3.
+- id: rfc9116
+  name: RFC 9116 security.txt
+  conforms: false
+  evidence:
+    type: probe
+    detail: Not served on any Empatica host; www and care answer /.well-known/security.txt
+      with a soft-404 HTML shell.
+    url: well-known/empatica-well-known.yml
+- id: asyncapi-webhooks
+  name: AsyncAPI / webhook event surface
+  conforms: false
+  evidence:
+    type: search
+    detail: No event, streaming or webhook surface is documented. A support-centre
+      search for "webhook" returns zero articles.
+- id: a2a-agent-card
+  name: A2A Agent Card
+  conforms: false
+  evidence:
+    type: probe
+    detail: /.well-known/agent-card.json and /.well-known/agent.json miss on every host
+      (404 on api and support; soft-404 HTML shell on www and care).
+    url: well-known/empatica-well-known.yml
+summary:
+  regulatory_regimes: 8
+  api_standards_conformant: 2
+  api_standards_absent: 6
+  note: >-
+    Empatica clears an unusually high regulatory bar — MDSAP, EU MDR, ISO 13485, ISO/IEC
+    27001 and eight FDA 510(k)s — and publishes verifiable certificate links for each.
+    None of that reaches the API layer: no OpenAPI, no problem+json, no OAuth discovery,
+    no security.txt, no event contract. The compliance posture and the interface posture
+    are decoupled.

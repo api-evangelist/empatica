@@ -1,0 +1,133 @@
+generated: '2026-08-12'
+method: searched
+source: https://support.empatica.com/hc/en-us/articles/17727336158365-Raw-data-in-the-Empatica-Cloud
+docs:
+- https://support.empatica.com/hc/en-us/articles/17727336158365-Raw-data-in-the-Empatica-Cloud
+- https://support.empatica.com/hc/en-us/articles/17405877853981-How-to-access-Avro-files-with-Python
+- https://support.empatica.com/hc/en-us/articles/13879014347421-Accessing-Data-on-the-S3-Bucket
+- https://www.empatica.com/rawdata/
+name: Empatica raw-data model (Avro file schema)
+description: >-
+  There is no OpenAPI to derive an entity graph from, so this data model is read
+  from the one place Empatica genuinely publishes a schema: the Apache Avro files
+  it writes to the customer S3 bucket. The files are self-describing — the schema
+  and per-sensor sampling frequency are embedded in each file — and Empatica's own
+  Python example script names the field paths reproduced below. Every field here
+  appears in provider-published documentation or in the provider's published
+  example code. Field types are stated only where the documentation states them.
+format: Apache Avro (1.11.x)
+delivery: 'AWS S3, organization-scoped prefix: s3://bucket-name/version/dir-name/'
+file_naming: '[participant_id]_[utc_timestamp_start].avro'
+cadence: uploaded every 30 minutes; each file holds up to ~30 minutes of uninterrupted
+  stream
+timezone: all data and filename timestamps are UTC+00:00
+entities:
+- name: AvroFile
+  root: true
+  description: One self-contained Avro record covering one uninterrupted capture window
+    for one participant.
+  fields:
+  - {name: schemaVersion, shape: '{major, minor, patch}', description: Avro schema version.
+      Behaviour changes at the 6.5.0 boundary — see conversions below.}
+  - {name: rawData, description: Container for every sensor stream in this window.}
+  relationships:
+  - {has_one: SchemaVersion, via: schemaVersion}
+  - {has_one: RawData, via: rawData}
+  - {belongs_to: Participant, via: participant_id in the filename}
+  metadata_documented:
+  - Participant Full ID
+  - Device serial number
+  - Participant's time offset from UTC+00:00
+  - Sensors polling rate
+  - ADC IMU parameters
+- name: RawData
+  description: The sensor stream container. Availability of individual streams depends
+    on the study configuration, so a stream can legitimately be empty.
+  relationships:
+  - {has_one: Accelerometer, via: accelerometer}
+  - {has_one: Gyroscope, via: gyroscope}
+  - {has_one: BloodVolumePulse, via: bvp}
+  - {has_one: ElectrodermalActivity, via: eda}
+  - {has_one: Temperature, via: temperature}
+  - {has_one: Steps, via: steps}
+  - {has_one: SystolicPeaks, via: systolicPeaks}
+  - {has_many: Tag, via: tags}
+- name: Accelerometer
+  path: rawData.accelerometer
+  fields:
+  - {name: timestampStart, description: Microsecond UTC timestamp of the first sample.}
+  - {name: samplingFrequency, description: Samples per second; used to reconstruct per-sample
+      timestamps.}
+  - {name: x, description: Array of ADC counts on the X axis.}
+  - {name: y, description: Array of ADC counts on the Y axis.}
+  - {name: z, description: Array of ADC counts on the Z axis.}
+  - {name: imuParams, shape: '{physicalMax, physicalMin, digitalMax, digitalMin, conversionFactor}',
+    description: ADC IMU parameters used to convert counts to g.}
+  conversion:
+    before_6_5_0: 'g = value * (physicalMax - physicalMin) / (digitalMax - digitalMin)'
+    from_6_5_0: g = value * conversionFactor
+    note: >-
+      A consumer MUST branch on schemaVersion to convert accelerometer counts
+      correctly. This is a silent breaking change in the data contract with no
+      version negotiation and no deprecation header — the only signal is the
+      schemaVersion triple inside the file.
+    source: https://support.empatica.com/hc/en-us/articles/17405877853981-How-to-access-Avro-files-with-Python
+- name: ElectrodermalActivity
+  path: rawData.eda
+  fields:
+  - {name: timestampStart}
+  - {name: samplingFrequency}
+  - {name: values, description: Array of EDA samples.}
+- name: Temperature
+  path: rawData.temperature
+  fields:
+  - {name: timestampStart}
+  - {name: samplingFrequency}
+  - {name: values, description: Array of skin temperature samples.}
+- name: BloodVolumePulse
+  path: rawData.bvp
+  description: Blood volume pulse stream from the PPG sensor. Named in the raw-data
+    stream list.
+- name: Gyroscope
+  path: rawData.gyroscope
+  description: Gyroscope stream. Named in the raw-data stream list.
+- name: Steps
+  path: rawData.steps
+  description: Step counts. Named in the raw-data stream list.
+- name: SystolicPeaks
+  path: rawData.systolicPeaks
+  description: Detected systolic peaks. Named in the raw-data stream list.
+- name: Tag
+  path: rawData.tags
+  description: Participant-marked events recorded on the device.
+  source: https://support.empatica.com/hc/en-us/articles/17703560836381-How-tagged-events-data-look-in-the-RAW-data
+- name: Participant
+  description: >-
+    The subject a file belongs to. Identified by participant_id in the filename and by
+    Participant Full ID in the file metadata. Participants are created and terminated
+    through the Care Portal or, for enterprise trials, through the Cloud API using the
+    sponsor's own existing participant IDs.
+  relationships:
+  - {has_many: AvroFile, via: participant_id}
+  - {has_one: Device, via: device serial number}
+- name: Device
+  description: EmbracePlus or EmbraceMini wearable. Identified by serial number carried
+    in each Avro file's metadata.
+sensors_documented: [PPG, EDA, Skin thermometer, Accelerometer, Gyroscope]
+derived_products:
+  digital_measures: '300+ digital measures / digital biomarkers, delivered as CSV. The
+    per-measure catalog is not published publicly.'
+  source: https://www.empatica.com/llms.txt
+reader_support:
+  official_avro_apis: [Python, Java, C, 'C#', C++]
+  also_supported: [MATLAB]
+  provider_example: 'Python script converting one Avro file into one CSV per sensor,
+    published in the support centre (tested against Avro file schema v6).'
+gaps:
+- No JSON Schema, OpenAPI or published .avsc file — the schema exists only embedded
+  inside delivered data, so it cannot be read before a study produces data.
+- The full field-level reference ("Data Access Documentation") is reachable only from
+  inside the Care Portal, at https://s3.amazonaws.com/box.empatica.com/ehmp/careportal/data_access/v2.4e/en.pdf,
+  and is a PDF rather than a machine-readable schema.
+- The digital-measure catalog (the 300+ biomarkers that are the actual product) has no
+  public data dictionary.

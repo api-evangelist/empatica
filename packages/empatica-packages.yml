@@ -1,0 +1,95 @@
+generated: '2026-08-12'
+method: searched
+source: https://registry.npmjs.org/-/v1/search?text=empatica
+name: Empatica client libraries and packages
+description: >-
+  Empatica publishes NO first-party client library on any public package
+  registry today. npm, PyPI, Maven Central and the Empatica GitHub organization
+  were all searched. Every package that carries the Empatica name is
+  community-maintained, targets the discontinued E4 wristband, and has not been
+  released in years. The first-party E4 SDKs (E4link for Android, EmpaLink for
+  iOS) were distributed from developer.empatica.com, which was retired with the
+  E4 on 2025-02-14 and now serves only a redirect to the sunset notice — so the
+  official SDK surface did not move to a registry, it disappeared.
+official_package_count: 0
+registries_searched: [npm, PyPI, Maven Central, GitHub (empatica org)]
+packages:
+- name: empatica-api
+  language: javascript
+  registry: npm
+  url: https://www.npmjs.com/package/empatica-api
+  repository: https://github.com/mrzmyr/empatica-api
+  official: false
+  version: 0.1.8
+  published: '2018-12-27'
+  description: 'Unofficial Empatica Node.js module to access web data. Self-declared
+    unofficial in its own registry description. Wraps the legacy E4 Connect web surface;
+    last release predates the E4 sunset by six years.'
+- name: pyempatica
+  language: python
+  registry: pypi
+  url: https://pypi.org/project/pyempatica/
+  repository: https://github.com/Munroe-Meyer-Institute-VR-Laboratory/pyEmpatica
+  author: Walker Arce (Munroe-Meyer Institute VR Laboratory)
+  official: false
+  version: 0.6.0
+  published: '2022-07-30'
+  description: Community library to communicate with an Empatica E4 from Python. Targets
+    hardware that has been sunset.
+- name: empatica-e4-client
+  language: javascript
+  registry: npm
+  url: https://www.npmjs.com/package/empatica-e4-client
+  repository: https://github.com/htil/empatica-e4-client
+  official: false
+  version: 1.0.4
+  published: '2017-10-27'
+  description: Node.js module communicating with the Empatica E4 Bluetooth streaming
+    server.
+- name: empatica-connect
+  language: javascript
+  registry: npm
+  url: https://www.npmjs.com/package/empatica-connect
+  repository: https://github.com/danbee/empatica-connect
+  official: false
+  version: 0.0.4
+  published: '2015-07-22'
+  description: Fetches the latest session from the retired Empatica Connect service.
+- name: cordova-plugin-empatica-device
+  language: javascript
+  registry: npm
+  url: https://www.npmjs.com/package/cordova-plugin-empatica-device
+  repository: https://github.com/mjohan/cordova-plugin-empatica-device
+  official: false
+  version: 1.0.0
+  published: '2017-01-26'
+  description: Cordova plugin to connect to an Empatica device and read sensor data.
+- name: org.radarbase:radar-android-empatica
+  language: java
+  registry: maven-central
+  url: https://central.sonatype.com/artifact/org.radarbase/radar-android-empatica
+  official: false
+  version: 1.4.1
+  published: null
+  note: >-
+    Maintained by the RADAR-base open-source research platform, not by Empatica.
+    Latest version read from the Maven Central search index; the release date could
+    not be read because search.maven.org timed out on the gav query during this pass.
+current_integration_path:
+  description: >-
+    With no first-party SDK, the supported integration path is generic tooling against
+    generic protocols: any AWS S3 client for data retrieval, and any Avro reader for
+    parsing.
+  recommended_by_provider:
+  - {name: Cyberduck, kind: file-transfer client, note: Empatica's recommended choice;
+      free and open source, Windows and macOS.}
+  - {name: AWS CLI v2, kind: cli, note: Third-party (Amazon), not an Empatica CLI.}
+  - {name: AWS SDKs, kind: sdk, note: Python, Java, JavaScript and others; third-party
+      (Amazon).}
+  - {name: Apache Avro APIs, kind: parser, languages: [Python, Java, C, 'C#', C++, MATLAB]}
+  source: https://support.empatica.com/hc/en-us/articles/13879014347421-Accessing-Data-on-the-S3-Bucket
+gaps:
+- No official client library for the Cloud API in any language.
+- The newest package bearing the Empatica name shipped in 2022, and all of them target
+  hardware Empatica discontinued in February 2025.
+- No SDKs pointer is emitted in apis.yml, because official_package_count is 0.
