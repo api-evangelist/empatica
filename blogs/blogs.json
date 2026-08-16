@@ -1,0 +1,21 @@
+{
+  "repo": "empatica",
+  "feeds": [
+    {
+      "source": "https://www.empatica.com/cloud-api/",
+      "feed_url": "https://www.empatica.com/cloud-api/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
+      "source": "https://www.empatica.com/submitrequest/",
+      "feed_url": "https://www.empatica.com/submitrequest/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-15T12:22:01Z"
+}
