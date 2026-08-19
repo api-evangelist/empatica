@@ -18,7 +18,7 @@ image: https://cdn.sanity.io/images/ggwhkgro/production/672c80e64ce4b99e66a90a38
 url: https://raw.githubusercontent.com/api-evangelist/empatica/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-08-12'
 modified: '2026-08-12'
 tags:
