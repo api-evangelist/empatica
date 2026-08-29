@@ -14,6 +14,17 @@ description: 'Empatica Inc. is an MIT Media Lab spinoff, founded in Cambridge, M
   data lands every 30 minutes as Apache Avro files; and a live REST host at api.empatica.com
   backing Empatica''s own apps and portals. The Cloud API reference is issued only
   to contracted clients, so no OpenAPI, AsyncAPI or public API reference is published.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://cdn.sanity.io/images/ggwhkgro/production/672c80e64ce4b99e66a90a38c82364a4e5674f68-3600x1155.png
 url: https://raw.githubusercontent.com/api-evangelist/empatica/refs/heads/main/apis.yml
 x-type: company
