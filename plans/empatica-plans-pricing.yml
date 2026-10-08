@@ -99,3 +99,50 @@ gaps:
   pages, so an agent reading the store HTML sees no prices at all — the llms.txt is
   strictly the better machine-readable source, which is an unusual and welcome inversion.
 - No free tier, trial, or sandbox at any price point.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - negotiated
+  - subscription
+  units: []
+  plans:
+  - name: Empatica Health Monitoring Platform — Academic & Basic Research
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Empatica Health Monitoring Platform — Enterprise Trials
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
+  - name: EpiMonitor — Basic
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: EpiMonitor — Standard
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: EpiMonitor — Plus
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Embrace2
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
